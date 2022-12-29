@@ -208,9 +208,12 @@ local new_request = function(url, http_stat)
 end
 
 
--- After a request has finished. Currently just applies the delay, if there is one, for the next one.
-local finish_request = function()
+-- Before a request starts being sent Currently just applies the delay, if there is one, for the next one.
+local before_request = function()
 	local next_req = expected_urls:peek_left()
+	if not next_req then
+		return
+	end
 	
 	local max = function(a, b)
 		if a > b then
@@ -289,7 +292,7 @@ wget.callbacks.get_urls = function(file, url, is_css, iri)
 		table.insert(to_queue, 1, inserting.options) -- Insert at the beginning, as the first item in the returned list from this function, is the one that gets run last
 	end
 	queued_requests_not_yet_queued_to_wget = {}
-	finish_request()
+	before_request() -- Before the next one
 	return to_queue
 end
 
