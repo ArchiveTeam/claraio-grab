@@ -136,7 +136,7 @@ end
 queue_request = function(options_table, handler, backfeed)
 	queue_request_inner(options_table, handler, backfeed)
 end
-local general_project_script = require 'example_project'
+local general_project_script = require 'claraio'
 
 
 

@@ -40,7 +40,7 @@ if StrictVersion(seesaw.__version__) < StrictVersion('0.8.5'):
 WGET_AT = find_executable(
     'Wget+AT',
     [
-        'GNU Wget 1.20.3-at.20211001.01'
+        'GNU Wget 1.21.3-at.20220608.02'
     ],
     [
         './wget-at',
@@ -59,7 +59,7 @@ if not WGET_AT:
 # It will be added to the WARC files and reported to the tracker.
 VERSION = '20220309.01'
 USER_AGENT = 'Archiveteam (https://wiki.archiveteam.org/; communicate at https://webirc.hackint.org/#ircs://irc.hackint.org/#archiveteam)'
-TRACKER_ID = 'radikal'
+TRACKER_ID = 'claraio'
 TRACKER_HOST = 'legacy-api.arpa.li.invalid'
 MULTI_ITEM_SIZE = 1
 
@@ -248,19 +248,19 @@ class WgetArgs(object):
 # This will be shown in the warrior management panel. The logo should not
 # be too big. The deadline is optional.
 project = Project(
-    title = 'radikal',
+    title = 'clara.io',
     project_html = '''
-    <img class="project-logo" alt="logo" src="https://wiki.archiveteam.org/images/f/f6/Radikal-logo.gif" height="50px"/>
-    <h2>Radikal.ru <span class="links"><a href="https://radikal.ru/">Website</a> &middot; <a href="http://tracker.archiveteam.org/radikal/">Leaderboard</a></span></h2>
+    <img class="project-logo" alt="logo" src="https://wiki.archiveteam.org/images/d/d9/Clara_IO_logo.png" height="50px"/>
+    <h2>Clara.io <span class="links"><a href="https://clara.io/">Website</a> &middot; <a href="http://tracker.archiveteam.org/claraio/">Leaderboard</a></span></h2>
     ''',
-    )#utc_deadline = datetime.datetime(2021,9,13, 0,0,0))
+    utc_deadline = datetime.datetime(2022,12,31, 0,0,0))
 
 pipeline = Pipeline(
     CheckIP(),
     GetItemFromTracker('http://{}/{}/multi={}/'
         .format(TRACKER_HOST, TRACKER_ID, MULTI_ITEM_SIZE),
         downloader, VERSION),
-    PrepareDirectories(warc_prefix='radikal'),
+    PrepareDirectories(warc_prefix='claraio'),
     WgetDownload(
         WgetArgs(),
         max_tries=1,
