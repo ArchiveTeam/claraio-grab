@@ -4,6 +4,7 @@ local ansicolors = require 'Lib/ansicolors'
 local urlparse = require("socket.url") -- In the system
 local queue_item_utils = require "Framework/queue_item"
 local backfeed_l = require "Framework/backfeed"
+local socket = require "socket"
 require "Lib/strict"
 require "Lib/table_show"
 require "Lib/utils"
@@ -206,6 +207,34 @@ local new_request = function(url, http_stat)
 	new_request_called_since_last_httploop_result = true
 end
 
+
+-- After a request has finished. Currently just applies the delay, if there is one, for the next one.
+local finish_request = function()
+	local next_req = expected_urls:peek_left()
+	
+	local max = function(a, b)
+		if a > b then
+			return a
+		else
+			return b
+		end
+	end
+	
+	local delay = 0
+	if next_req.options.delay_until then
+		delay = max(delay, next_req.options.delay_until - socket.gettime())
+	end
+	if next_req.options.prior_delay then
+		delay = max(delay, next_req.options.prior_delay)
+	end
+	
+	if delay > 0 then
+		print_cbsd("Delaying " .. tostring(delay), WARNING)
+		os.execute("sleep " .. delay)
+	end
+end
+
+
 wget.callbacks.write_to_warc = function(url, http_stat)
 	new_request(url, http_stat)
 	
@@ -260,6 +289,7 @@ wget.callbacks.get_urls = function(file, url, is_css, iri)
 		table.insert(to_queue, 1, inserting.options) -- Insert at the beginning, as the first item in the returned list from this function, is the one that gets run last
 	end
 	queued_requests_not_yet_queued_to_wget = {}
+	finish_request()
 	return to_queue
 end
 

@@ -29,6 +29,5 @@ get_body() - returns a string containing the current response body.
 
 Special options for the options table in queue_url():
 - Everything in vanilla wget-lua get_urls - see https://github.com/ArchiveTeam/wget-lua/wiki#callback-get_urls
-(The following are not implemented yet)
 - prior_delay - retrieval will pause for at least this many seconds between the previous request and this one; possibly more if delay_until is later.
 - delay_until - retrieval will pause right before this request is going to be made, until this Unix time is reached, until prior_delay causes a longer pause.
