@@ -30,6 +30,12 @@ module.httploop_result = function(url, err, http_stat)
 		queue_request({url="https://clara.io/api/scenes/" .. id}, scene_info_full)
 		queue_request({url="https://clara.io/player/v2/" .. id .. "?wait=true"}, beta_player)
 		queue_request({url="https://clara.io/embed/" .. id .. "?renderer=gl"}, retry_common.only_retry_handler(10, {200})) -- This doesn't get a special handler because it is broken in the live site
+		-- E.g. https://clara.io/view/c38534ff-483f-4fc2-8f0b-b8ea131a5fe8 - I can't determine when it is that these options are used so I'll just get a bit of possibly-extraneous HTML each model
+		-- N.b. for future reference, the /render view is broken on the live site as of writing
+		queue_request({url=url["url"] .. "/webgl"}, retry_common.only_retry_handler(10, {200}))
+		queue_request({url=url["url"] .. "/render"}, retry_common.only_retry_handler(10, {200}))
+		-- This is used by /render
+		queue_request({url="https://clara.io/embed/" .. id .. "?renderer=vray&hideLogo=true&header=false"}, retry_common.only_retry_handler(10, {200}))
 	elseif sc == 404 then
 		-- Nothing
 	else
