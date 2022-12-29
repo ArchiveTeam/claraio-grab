@@ -18,6 +18,11 @@ module.get_urls = function(file, url, is_css, iri)
 		
 		-- Now the uploading user
 		queue_request({url="https://clara.io/user/" .. res["owner"]}, "user", true)
+		
+		-- And the parent submission, if it exists
+		if res["cloneOf"] then
+			queue_request({url="https://clara.io/view/" .. res["cloneOf"]}, "view_model", true)
+		end
 	end
 end
 
