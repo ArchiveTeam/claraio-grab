@@ -12,8 +12,14 @@ module.get_urls = function(file, url, is_css, iri)
 		local res = JSON:decode(get_body())
 		for _, v in pairs(res["files"]) do
 			assert((not v["md5"]) or v["hash"] == v["md5"], "Failure on " .. v["_id"])
-			queue_request({url="https://clara.io/resources/" .. v["hash"] .. v["suffix"] .. "?filename=" .. minimal_escape(v["name"])}, retry_common.only_retry_handler(10, {200})) -- TODO escape these e.g. https://clara.io/player/v2/2c296545-1204-4fc3-b470-c39bec65e86c?wait=true
-			queue_request({url="https://clara.io/resources/" .. v["hash"] .. "lzma1" .. "?filename=" .. minimal_escape(v["name"])}, retry_common.only_retry_handler(10, {200, 404})) -- Ditto. Also I cannot be bothered to write a parser for the thing that determines whether these are present, hence why 404 is allowd.
+			queue_request({url="https://clara.io/resources/" .. v["hash"] .. v["suffix"] .. "?filename=" .. minimal_escape(v["name"])}, retry_common.only_retry_handler(10, {200}))
+			queue_request({url="https://clara.io/resources/" .. v["hash"] .. "lzma1" .. "?filename=" .. minimal_escape(v["name"])}, retry_common.only_retry_handler(10, {200, 404})) -- I cannot be bothered to write a parser for the thing that determines whether these are present, hence why 404 is allowd.
+		end
+		
+		for _, v in pairs(res["thumbnails"]) do
+			if v["hash"] and v["hash"] ~= "ok" then
+				queue_request({url="https://clara.io/resources/" .. v["hash"]}, retry_common.only_retry_handler(10, {200}))
+			end
 		end
 		
 		-- Now the uploading user

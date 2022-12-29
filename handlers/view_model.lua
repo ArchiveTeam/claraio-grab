@@ -3,12 +3,17 @@ local one_redirect = require "handlers/one_redirect"
 local scene_info_full = require "handlers/scene_info_full"
 local comments = require "handlers/comments"
 local beta_player = require "handlers/beta_player"
+local redirect_chain = require "handlers/redirect_chain"
 
 local module = {}
 
 module.download_child_p = function(urlpos, parent, depth, start_url_parsed, iri, verdict, reason)
 	if string.match(urlpos["url"]["url"], "jpe?g/?$") then
 		queue_request({url=urlpos["url"]["url"]}, one_redirect.make_one_redirect_handler(retry_common.only_retry_handler(10, {200})))
+	end
+
+	if string.match(urlpos["url"]["url"], "gravatar") then
+		queue_request({url=urlpos["url"]["url"]}, redirect_chain.make_one_redirect_chain_handler(2))
 	end
 end
 
