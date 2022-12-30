@@ -32,6 +32,7 @@ local queue_list_to = function(list, key)
         if code == 200 or code == 409 then
           break
         end
+        print("Failed to submit discovered URLs." .. tostring(code) .. " " .. tostring(body)) -- From arkiver https://github.com/ArchiveTeam/vlive-grab/blob/master/vlive.lua
         os.execute("sleep " .. math.floor(math.pow(2, tries)))
         tries = tries + 1
       end
