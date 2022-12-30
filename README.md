@@ -186,6 +186,6 @@ Are you a developer? Help write code for us! Look at our [developer documentatio
 
 ### Other problems
 
-Have an issue not listed here? Join us on IRC and ask! We can be found at hackint IRC [#curiousincidentoftheconfusedcatinthenighttime](https://webirc.hackint.org/#irc://irc.hackint.org/#curiousincidentoftheconfusedcatinthenighttime).
+Have an issue not listed here? Join us on IRC and ask! We can be found at hackint IRC [#clarity](https://webirc.hackint.org/#irc://irc.hackint.org/#clarity).
 
 
