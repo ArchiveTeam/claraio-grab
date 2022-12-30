@@ -41,7 +41,7 @@ local queue_list_to = function(list, key)
 end
 
 module.upload = function()
-	queue_list_to(queue, "ADD_KEY_HERE")
+	queue_list_to(queue, "claraio-fi9t9ejcm1hasga")
 	queue = {}
 end
 
