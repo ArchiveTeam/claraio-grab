@@ -26,8 +26,8 @@ local queue_list_to = function(list, key)
       local tries = 0
       while tries < 10 do
         local body, code, headers, status = http.request(
-          "https://legacy-api.arpa.li/backfeed/legacy/" .. key .. "/",
-          to_send
+          "https://legacy-api.arpa.li/backfeed/legacy/" .. key,
+          to_send .. "\0"
         )
         if code == 200 or code == 409 then
           break
