@@ -1,3 +1,5 @@
+local http = require("socket.http")
+
 local module = {}
 
 local queue = {}
