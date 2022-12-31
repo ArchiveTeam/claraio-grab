@@ -21,4 +21,11 @@ module.httploop_result = function(url, err, http_stat)
 end
 
 
+module.write_to_warc = function(url, http_stat)
+	local sc = http_stat["statcode"]
+	return sc == 200
+end
+
+
+
 return module

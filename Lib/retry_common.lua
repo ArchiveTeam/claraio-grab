@@ -23,6 +23,9 @@ retry_common.only_retry_handler = function(max, allowed_status_codes)
 			retry_common.retry_unless_hit_iters(max)
 		end
 	end
+	handler.write_to_warc = function(url, http_stat)
+		return allowed_sc_lookup[http_stat["statcode"]]
+	end
 	return handler
 end
 
