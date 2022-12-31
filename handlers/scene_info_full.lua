@@ -23,7 +23,7 @@ module.get_urls = function(file, url, is_css, iri)
 		
 		for _, v in pairs(res["thumbnails"]) do
 			if v["hash"] and v["hash"] ~= "ok" then
-				queue_request({url="https://clara.io/resources/" .. v["hash"]}, retry_common.only_retry_handler(10, {200}))
+				queue_request({url="https://clara.io/resources/" .. v["hash"]}, retry_common.only_retry_handler(10, {200, 504}))
 			end
 		end
 		
