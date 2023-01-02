@@ -61,7 +61,7 @@ VERSION = '20230101.02'
 USER_AGENT = 'Archiveteam (https://wiki.archiveteam.org/; communicate at https://webirc.hackint.org/#ircs://irc.hackint.org/#archiveteam)'
 TRACKER_ID = 'claraio'
 TRACKER_HOST = 'legacy-api.arpa.li'
-MULTI_ITEM_SIZE = 1
+MULTI_ITEM_SIZE = 100
 
 
 ###########################################################################
