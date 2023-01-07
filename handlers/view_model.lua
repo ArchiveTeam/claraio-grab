@@ -13,7 +13,7 @@ module.download_child_p = function(urlpos, parent, depth, start_url_parsed, iri,
 	end
 
 	if string.match(urlpos["url"]["url"], "gravatar") then
-		queue_request({url=urlpos["url"]["url"]}, redirect_chain.make_one_redirect_chain_handler(2))
+		queue_request({url=urlpos["url"]["url"]}, redirect_chain.make_one_redirect_chain_handler(2, true))
 	end
 end
 
