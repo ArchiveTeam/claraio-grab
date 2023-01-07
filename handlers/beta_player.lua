@@ -16,7 +16,7 @@ end
 module.httploop_result = function(url, err, http_stat)
 	cur_stat_code = http_stat["statcode"]
 	if cur_stat_code ~= 200 then
-		retry_common.retry_unless_hit_iters(10)
+		retry_common.retry_unless_hit_iters(3, true)
 	end
 end
 

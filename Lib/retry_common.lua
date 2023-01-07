@@ -3,10 +3,17 @@ local socket = require "socket"
 
 
 
-retry_common.retry_unless_hit_iters = function(max)
+retry_common.retry_unless_hit_iters = function(max, give_up_instead_of_crashing)
 	local new_options = deep_copy(current_options)
 	local cur_try = new_options["try"] or 1
-	assert(cur_try <= max, "Giving up due to too many retries...") -- Stupid way to fail when it gives up
+	if cur_try > max then
+		if not give_up_instead_of_crashing then
+			error("Crashing due to too many retries")
+		else
+			print("Giving up due to too many retries...")
+			return
+		end
+	end
 	new_options["try"] = cur_try + 1
 	new_options["delay_until"] = socket.gettime() + 2^(cur_try + 1)
 	queue_request(new_options, current_handler)

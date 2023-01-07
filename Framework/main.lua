@@ -330,7 +330,7 @@ wget.callbacks.httploop_result = function(url, err, http_stat)
 
 	-- If you return EXIT uniformly DCP will never be called
 	-- TODO see about the additional weirdness with this - like is get_urls called on redirects?
-	if status_code >= 300 and status_code <= 399 then
+	if (status_code >= 300 and status_code <= 399) or status_code == 0 then
 		return wget.actions.EXIT
 	else
 		return wget.actions.NOTHING
