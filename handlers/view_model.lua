@@ -9,7 +9,7 @@ local module = {}
 
 module.download_child_p = function(urlpos, parent, depth, start_url_parsed, iri, verdict, reason)
 	if string.match(urlpos["url"]["url"], "jpe?g/?$") then
-		queue_request({url=urlpos["url"]["url"]}, one_redirect.make_one_redirect_handler(retry_common.only_retry_handler(10, {200})))
+		queue_request({url=urlpos["url"]["url"]}, one_redirect.make_one_redirect_handler(retry_common.only_retry_handler(10, {200}), true))
 	end
 
 	if string.match(urlpos["url"]["url"], "gravatar") then
@@ -26,7 +26,7 @@ module.httploop_result = function(url, err, http_stat)
 		queue_request({url="https://clara.io/api/scenes/" .. id .. "?shallowCloneInfo=true"}, retry_common.only_retry_handler(10, {200}))
 		queue_request({url="https://clara.io/library?derived=true&sceneId=" .. id}, "derived_from_first_page")
 		queue_request({url="https://clara.io/api/scenes/" .. id .. "/comments?page=1&perPage=50"}, comments)
-		queue_request({url="https://clara.io/api/scenes/" .. id .. "/thumbnail.jpg/"}, one_redirect.make_one_redirect_handler(retry_common.only_retry_handler(10, {200})))
+		queue_request({url="https://clara.io/api/scenes/" .. id .. "/thumbnail.jpg/"}, one_redirect.make_one_redirect_handler(retry_common.only_retry_handler(10, {200, 404}), true))
 		queue_request({url="https://clara.io/api/scenes/" .. id}, scene_info_full)
 		queue_request({url="https://clara.io/player/v2/" .. id .. "?wait=true"}, beta_player)
 		queue_request({url="https://clara.io/embed/" .. id .. "?renderer=gl"}, retry_common.only_retry_handler(10, {200})) -- This doesn't get a special handler because it is broken in the live site

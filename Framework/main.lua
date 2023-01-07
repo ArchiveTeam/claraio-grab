@@ -103,6 +103,7 @@ end
 
 -- "Inner" so that I can keep referring directly to it even if project code wraps queue_request in something
 local queue_request_inner = function(options_table, handler, backfeed)
+	print_cbsd("Trying to queue the following: " .. table.show(options_table), DEBUG)
 	options_table = queue_item_utils.fill_in_defaults(options_table)
 	assert(not options_table.post_data, "Use method=\"POST\" and the body_data option instead of post_data")
 	assert(handler, "If you want a handler that does nothing, use an empty table instead of nil")
