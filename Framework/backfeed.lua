@@ -4,6 +4,25 @@ local module = {}
 
 local queue = {}
 
+local send_binary = function(to_send, key)
+  local tries = 0
+  while tries < 10 do
+    local body, code, headers, status = http.request(
+      "https://legacy-api.arpa.li/backfeed/legacy/" .. key,
+      to_send
+    )
+    if code == 200 or code == 409 then
+      break
+    end
+    print("Failed to submit discovered URLs." .. tostring(code) .. " " .. tostring(body)) -- From arkiver https://github.com/ArchiveTeam/vlive-grab/blob/master/vlive.lua
+    os.execute("sleep " .. math.floor(math.pow(2, tries)))
+    tries = tries + 1
+  end
+  if tries == 10 then
+    abortgrab = true
+  end
+end
+
 -- Taken verbatim from previous projects I've done'
 local queue_list_to = function(list, key)
   if do_debug then
@@ -20,25 +39,15 @@ local queue_list_to = function(list, key)
         to_send = to_send .. "\0" .. item
       end
       print("Queued " .. item)
+      
+      if #to_send > 1500 then
+        send_binary(to_send .. "\0", key)
+        to_send = ""
+      end
     end
 
-    if to_send ~= nil then
-      local tries = 0
-      while tries < 10 do
-        local body, code, headers, status = http.request(
-          "https://legacy-api.arpa.li/backfeed/legacy/" .. key,
-          to_send .. "\0"
-        )
-        if code == 200 or code == 409 then
-          break
-        end
-        print("Failed to submit discovered URLs." .. tostring(code) .. " " .. tostring(body)) -- From arkiver https://github.com/ArchiveTeam/vlive-grab/blob/master/vlive.lua
-        os.execute("sleep " .. math.floor(math.pow(2, tries)))
-        tries = tries + 1
-      end
-      if tries == 10 then
-        abortgrab = true
-      end
+    if to_send ~= nil and #to_send > 0 then
+      send_binary(to_send .. "\0", key)
     end
   end
 end
