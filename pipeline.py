@@ -19,6 +19,7 @@ import string
 import json
 import requests
 import base64
+import re
 
 import seesaw
 from seesaw.externalprocess import WgetDownload
@@ -57,7 +58,7 @@ if not WGET_AT:
 #
 # Update this each time you make a non-cosmetic change.
 # It will be added to the WARC files and reported to the tracker.
-VERSION = '20230109.01'
+VERSION = '20230109.02'
 USER_AGENT = 'Archiveteam (https://wiki.archiveteam.org/; communicate at https://webirc.hackint.org/#ircs://irc.hackint.org/#archiveteam)'
 TRACKER_ID = 'claraio'
 TRACKER_HOST = 'legacy-api.arpa.li'
@@ -225,7 +226,7 @@ class WgetArgs(object):
         item_names_to_submit = item_names.copy()
         for item_name in item_names:
             item_type, item_value = item_name.split(':', 1)
-            if not ("SHELL" in item_value and len(item_value) > 1000):
+            if not (re.search(r"([0-9]+%2d){10,}", item_value) and len(item_value) > 1000):
                 initial_requests.append([item_type, item_value])
             
         item['item_name'] = '\0'.join(item_names_to_submit) # Nothing in the "framework" to do anything but fail altogether currently
