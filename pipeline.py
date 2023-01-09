@@ -57,7 +57,7 @@ if not WGET_AT:
 #
 # Update this each time you make a non-cosmetic change.
 # It will be added to the WARC files and reported to the tracker.
-VERSION = '20230108.02'
+VERSION = '20230109.01'
 USER_AGENT = 'Archiveteam (https://wiki.archiveteam.org/; communicate at https://webirc.hackint.org/#ircs://irc.hackint.org/#archiveteam)'
 TRACKER_ID = 'claraio'
 TRACKER_HOST = 'legacy-api.arpa.li'
@@ -225,7 +225,8 @@ class WgetArgs(object):
         item_names_to_submit = item_names.copy()
         for item_name in item_names:
             item_type, item_value = item_name.split(':', 1)
-            initial_requests.append([item_type, item_value])
+            if not ("SHELL" in item_value and len(item_value) > 1000):
+                initial_requests.append([item_type, item_value])
             
         item['item_name'] = '\0'.join(item_names_to_submit) # Nothing in the "framework" to do anything but fail altogether currently
 
