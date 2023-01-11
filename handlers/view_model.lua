@@ -4,6 +4,7 @@ local scene_info_full = require "handlers/scene_info_full"
 local comments = require "handlers/comments"
 local beta_player = require "handlers/beta_player"
 local redirect_chain = require "handlers/redirect_chain"
+local urlparse = require("socket.url")
 
 local module = {}
 
@@ -21,6 +22,7 @@ module.httploop_result = function(url, err, http_stat)
 	local id = string.match(url["url"], "^https?://clara%.io/view/([a-f0-9%-]+)$")
 	assert(id) -- Do this even if status code is weird
 	local sc = http_stat["statcode"]
+	local newloc = urlparse.absolute(url["url"], http_stat["newloc"])
 	if sc == 200 then
 		queue_request({url="https://clara.io/api/scenes/" .. id .. "?shallow=true"}, retry_common.only_retry_handler(10, {200}))
 		queue_request({url="https://clara.io/api/scenes/" .. id .. "?shallowCloneInfo=true"}, retry_common.only_retry_handler(10, {200}))
@@ -38,6 +40,9 @@ module.httploop_result = function(url, err, http_stat)
 		queue_request({url="https://clara.io/embed/" .. id .. "?renderer=vray&hideLogo=true&header=false"}, retry_common.only_retry_handler(10, {200}))
 	elseif sc == 404 then
 		-- Nothing
+	elseif sc == 302 and string.match(newloc, "^https?://clara%.io/login") then
+		-- Get the login page for clarity during viewing
+		queue_request({url=newloc}, retry_common.only_retry_handler(10, {200}))
 	else
 		retry_common.retry_unless_hit_iters(10)
 	end
