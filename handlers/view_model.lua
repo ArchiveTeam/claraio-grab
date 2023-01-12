@@ -9,7 +9,7 @@ local urlparse = require("socket.url")
 local module = {}
 
 module.download_child_p = function(urlpos, parent, depth, start_url_parsed, iri, verdict, reason)
-	if string.match(urlpos["url"]["url"], "jpe?g/?$") then
+	if string.match(urlpos["url"]["url"], "%.jpe?g/?$") then
 		queue_request({url=urlpos["url"]["url"]}, one_redirect.make_one_redirect_handler(retry_common.only_retry_handler(10, {200}), true))
 	end
 
