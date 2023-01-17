@@ -42,7 +42,7 @@ for i=1,#allowed_chars do
 end
 
 local is_hex = function(c)
-	return c ~= nil and string.match("^[a-fA-F0-9]$", c)
+	return c ~= nil and string.match(c, "^[a-fA-F0-9]$")
 end
 
 -- Escaping with less URLs escaped
