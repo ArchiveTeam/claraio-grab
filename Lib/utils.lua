@@ -35,10 +35,14 @@ end
 -- This is super-rudimentary
 -- E.g. it doesn't check for improperly-escaped input URLs
 -- Tries to duplicate what WGET does so that there aren't conflicts of the frameworks's queue and wget's
-local allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*'();:@&=+$,/?#[]_.~-%"
+local allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*'();:@&=+$,/?#[]_.~-"
 local char_is_allowed = {}
 for i=1,#allowed_chars do
 	char_is_allowed[allowed_chars:byte(i)] = true
+end
+
+local is_hex = function(c)
+	return c ~= nil and string.match("^[a-fA-F0-9]$", c)
 end
 
 -- Escaping with less URLs escaped
@@ -49,6 +53,8 @@ minimal_escape = function(s)
 		local b = s:byte(index)
 		if char_is_allowed[b] then
 			res = res .. string.char(b)
+		elseif b == string.byte("%") and is_hex(s:byte(index + 1)) and is_hex(s:byte(index + 2)) then
+			-- Do nothing
 		else
 			res = res .. string.format("%%%02X", b)
 		end
