@@ -34,14 +34,14 @@ end
 module.httploop_result = function(url, err, http_stat)
 	cur_stat_code = http_stat["statcode"]
 	if cur_stat_code ~= 200 then
-		retry_common.retry_unless_hit_iters(10)
+		retry_common.retry_unless_hit_iters(5, true)
 	end
 end
 
 
 module.write_to_warc = function(url, http_stat)
 	local sc = http_stat["statcode"]
-	return sc == 200
+	return sc == 200 or (current_options["try"] and current_options["try"] > 3)
 end
 
 return module
