@@ -42,7 +42,7 @@ for i=1,#allowed_chars do
 end
 
 local is_hex = function(c)
-	return c ~= nil and string.match(c, "^[a-fA-F0-9]$")
+	return c ~= nil and string.match(string.char(c), "^[a-fA-F0-9]$")
 end
 
 -- Escaping with less URLs escaped
@@ -54,7 +54,7 @@ minimal_escape = function(s)
 		if char_is_allowed[b] then
 			res = res .. string.char(b)
 		elseif b == string.byte("%") and is_hex(s:byte(index + 1)) and is_hex(s:byte(index + 2)) then
-			-- Do nothing
+			res = res .. "%"
 		else
 			res = res .. string.format("%%%02X", b)
 		end
