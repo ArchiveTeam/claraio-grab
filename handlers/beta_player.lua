@@ -9,7 +9,7 @@ module.get_urls = function(file, url, is_css, iri)
 	if cur_stat_code == 200 then
 		local res = string.match(get_body(), "xhr%.open%('GET', '(https://clara.io/resources/[a-f0-9]+)'")
 		if res then
-			queue_request({url=res}, retry_common.only_retry_handler(10, {200}))
+			queue_request({url=res}, retry_common.only_retry_handler(10, {200, 502}))
 		end
 	end
 end
