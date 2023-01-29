@@ -8,7 +8,7 @@ retry_common.retry_unless_hit_iters = function(max, give_up_instead_of_crashing)
 	local cur_try = new_options["try"] or 1
 	if cur_try > max then
 		if not give_up_instead_of_crashing then
-			error("Crashing due to too many retries")
+			print("Too many retries, skipping")
 		else
 			print("Giving up due to too many retries...")
 			return
