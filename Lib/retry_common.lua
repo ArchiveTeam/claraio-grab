@@ -9,6 +9,7 @@ retry_common.retry_unless_hit_iters = function(max, give_up_instead_of_crashing)
 	if cur_try > max then
 		if not give_up_instead_of_crashing then
 			print("Too many retries, skipping")
+			return
 		else
 			print("Giving up due to too many retries...")
 			return
